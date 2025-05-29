@@ -1,0 +1,9 @@
+flask
+arabic-reshaper
+numpy
+opencv-python
+mediapipe
+joblib
+gTTS
+python-bidi
+playsound
