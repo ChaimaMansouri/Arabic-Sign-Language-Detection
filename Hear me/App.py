@@ -7,6 +7,7 @@ import mediapipe as mp
 import joblib 
 from gtts import gTTS
 import time
+from PIL import ImageFont, ImageDraw, Image
 from bidi.algorithm import get_display
 import base64
 import json
@@ -15,6 +16,7 @@ app = Flask(__name__)
 
 # Chargement du modèle
 model = joblib.load("random_forest_model.pkl")
+scaler = joblib.load("scaler.pkl")
 
 # Mapping des labels arabes
 label_to_arabic = {
@@ -43,10 +45,15 @@ last_stable_label = None
 label_hold_start = None
 hold_duration_required = 2
 
+last_hand_detected_time = None
+space_timeout = 2
+
 cap = cv2.VideoCapture(0)
 
 def generate_frames():
     global current_letter, confirmed_word, last_stable_label, label_hold_start
+    last_hand_detected_time = None  # Tracks last time a hand was seen
+    space_timeout = 2  # Seconds of no-hand to trigger a space
 
     while True:
         success, frame = cap.read()
@@ -57,8 +64,12 @@ def generate_frames():
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         result = hands.process(rgb_frame)
 
-        progress = 0
+        progress = 0  # Reset progress if no hand is detected
+
         if result.multi_hand_landmarks:
+            # Update last hand detection time
+            last_hand_detected_time = time.time()
+
             for hand_landmarks in result.multi_hand_landmarks:
                 mp_drawing.draw_landmarks(
                     frame,
@@ -71,7 +82,8 @@ def generate_frames():
                 landmarks = [coord for lm in hand_landmarks.landmark for coord in (lm.x, lm.y, lm.z)]
                 if len(landmarks) == 63:
                     input_data = np.array(landmarks).reshape(1, -1)
-                    predicted_label = model.predict(input_data)[0].strip().capitalize()
+                    scaled_input = scaler.transform(input_data)
+                    predicted_label = model.predict(scaled_input)[0].strip().capitalize()
                     current_letter = label_to_arabic.get(predicted_label, "?")
 
                     now = time.time()
@@ -85,6 +97,26 @@ def generate_frames():
                                 confirmed_word += current_letter
                                 last_stable_label = None
                                 label_hold_start = None
+        else:
+            # Insert space if no hand is detected for `space_timeout` seconds
+            if last_hand_detected_time and (time.time() - last_hand_detected_time) > space_timeout:
+                if confirmed_word and not confirmed_word.endswith(" "):  # Avoid double spaces
+                    confirmed_word += " "
+                last_hand_detected_time = None  # Reset to prevent repeated spaces
+
+        # Encodage de l'image
+        ret, buffer = cv2.imencode('.jpg', frame)
+        frame_base64 = base64.b64encode(buffer).decode('utf-8')
+
+        # Préparation des données
+        data = {
+            "frame": frame_base64,
+            "letter": current_letter,
+            "progress": progress,
+            "word": confirmed_word
+        }
+
+        yield f"data: {json.dumps(data)}\n\n"
 
         # Encodage de l'image
         ret, buffer = cv2.imencode('.jpg', frame)
