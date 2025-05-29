@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام التعرف على لغة الإشارة العربية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00adad;            /* Your base teal */
+            --primary-dark: #008080;       /* Darker teal */
+            --primary-darker: #006b6b;      /* Even darker for contrast */
+            --primary-light: #beeed6;       /* Your green as light variant */
+            --primary-bg: #f0faf9;          /* Very pale teal background */
+            --text-dark: #2d4148;           /* Kept original (works well) */
+            --text-light: #4a5d68;          /* Kept original (works well) */
+            --accent: #ff6b6b;              /* Warmer coral accent (pairs beautifully with teal) */
+            --card-shadow: 0 4px 20px rgba(0, 173, 173, 0.1); /* Softer shadow using new primary */
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Unchanged */
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-dark);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        .logo {
+            width: 150px;
+            position: absolute;
+            top: 0;
+            right: 20%;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            color: var(--primary-darker);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            right: 0;
+            width: 60%;
+            height: 4px;
+            background: linear-gradient(to left, var(--primary), var(--primary-dark));
+            border-radius: 2px;
+        }
+        
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .camera-section {
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            transition: var(--transition);
+            animation: slideInLeft 0.8s ease-out;
+            border: 1px solid var(--primary-light);
+        }
+        
+        .camera-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(128, 198, 203, 0.2);
+        }
+        
+        .camera-header {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .camera-status {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+        
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ff4757;
+            margin-left: 8px;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-indicator.active {
+            background: #2ed573;
+        }
+        
+        .camera-container {
+            position: relative;
+            width: 100%;
+            padding-top: 5%; /* 4:3 Aspect Ratio */
+            overflow: hidden;
+        }
+        
+        #video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .results-section {
+            display: flex;
+            flex-direction: column;
+            animation: slideInRight 0.8s ease-out;
+        }
+        
+        .recognition-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+            flex-grow: 1;
+            border: 1px solid var(--primary-light);
+        }
+        
+        .recognition-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(128, 198, 203, 0.2);
+        }
+        
+        .card-title {
+            font-size: 1.1rem;
+            color: var(--primary-darker);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .card-title i {
+            margin-left: 8px;
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+        }
+        
+        .letter-display {
+            font-size: 5rem;
+            text-align: center;
+            margin: 1rem 0;
+            color: var(--primary-dark);
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-shadow: 0 2px 4px rgba(128, 198, 203, 0.3);
+        }
+        
+        .word-display {
+            font-size: 2rem;
+            text-align: center;
+            margin: 1rem 0;
+            color: var(--text-dark);
+            min-height: 60px;
+            direction: rtl;
+            padding: 1rem;
+            background: var(--primary-bg);
+            border-radius: 8px;
+            border: 1px dashed var(--primary-light);
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: var(--primary-light);
+            border-radius: 4px;
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        button {
+            border: none;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            font-family: 'Tajawal';
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+        
+        button i {
+            font-size: 1rem;
+        }
+        
+        .primary-btn {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 15px rgba(128, 198, 203, 0.3);
+        }
+        
+        .primary-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(128, 198, 203, 0.4);
+            background: linear-gradient(to right, var(--primary-dark), var(--primary-darker));
+        }
+        
+        .accent-btn {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 126, 126, 0.3);
+        }
+        
+        .accent-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 126, 126, 0.4);
+            background: #ff6b6b;
+        }
+        
+        .outline-btn {
+            background: white;
+            color: var(--text-dark);
+            border: 1px solid var(--primary-light);
+        }
+        
+        .outline-btn:hover {
+            background: var(--primary-bg);
+            border-color: var(--primary);
+        }
+        
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        
+        .output-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            padding: 1.5rem;
+            transition: var(--transition);
+            border: 1px solid var(--primary-light);
+        }
+        
+        .output-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(128, 198, 203, 0.2);
+        }
+        
+        #output {
+            min-height: 80px;
+            color: var(--text-light);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: auto;
+            padding-top: 2rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideInLeft {
+            from { transform: translateX(-30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .letter-display {
+                font-size: 4rem;
+            }
+            
+            .word-display {
+                font-size: 1.5rem;
+            }
+            
+            .app-container {
+                padding: 1rem;
+            }
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: var(--primary-bg);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    
+    <div class="app-container">
+        <header>
+            <img src="{{ url_for('static', filename='images/Hear_me.png') }}" alt="لغة الإشارة" class="logo">
+            <h1>نظام التعرف على لغة الإشارة العربية</h1>
+            <p class="subtitle">تقنية ذكاء اصطناعي متقدمة للتواصل مع مجتمع الصم والبكم بلغة الإشارة</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="camera-section">
+                <div class="camera-header">
+                    <span>الكاميرا</span>
+                    <div class="camera-status">
+                        <span id="cameraStatus">جاري التوصيل</span>
+                        <span class="status-indicator" id="statusIndicator"></span>
+                    </div>
+                </div>
+                 <div class="camera-container">
+                       <img id="videoFeed" src="{{ url_for('video_feed') }}" alt="Video Feed">
+                 </div>
+            </div>
+            
+            <div class="results-section">
+                <div class="recognition-card">
+                    <h3 class="card-title"><i class="fas fa-hands"></i> نتائج التعرف</h3>
+                    
+                    <div class="letter-display" id="letterDisplay"></div>
+                    
+                    <div class="progress-container">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                    
+                    <div class="word-display" id="wordDisplay"></div>
+                    
+                    <div class="controls">
+                        <button id="startBtn" class="primary-btn">
+                            <i class="fas fa-play"></i> بدء الكشف
+                        </button>
+                        <button id="resetBtn" class="accent-btn">
+                            <i class="fas fa-redo"></i> إعادة تعيين
+                        </button>
+                        <button id="speakBtn" class="primary-btn">
+                            <i class="fas fa-volume-up"></i> نطق الجملة
+                        </button>
+                        <button id="undoBtn" class="outline-btn">
+                            <i class="fas fa-undo"></i> تراجع
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="output-card">
+                    <h3 class="card-title"><i class="fas fa-info-circle"></i> معلومات النظام</h3>
+                    <div id="output">جاري تحميل النموذج وإعداد الكاميرا...</div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2025 نظام التعرف على لغة الإشارة العربية | جميع الحقوق محفوظة</p>
+        </footer>
+    </div>
+
+    <script>
+        // Éléments DOM
+        const videoFeed = document.getElementById('videoFeed');
+        const letterDisplay = document.getElementById('letterDisplay');
+        const wordDisplay = document.getElementById('wordDisplay');
+        const progressBar = document.getElementById('progressBar');
+        const output = document.getElementById('output');
+        const resetBtn = document.getElementById('resetBtn');
+        const speakBtn = document.getElementById('speakBtn');
+        const undoBtn = document.getElementById('undoBtn');
+        const cameraStatus = document.getElementById('cameraStatus');
+        const statusIndicator = document.getElementById('statusIndicator');
+
+        // Variables d'état
+        let confirmedWord = '';
+        let eventSource = null;
+
+        // Mise à jour de l'état
+        function updateStatus(message, isActive) {
+            cameraStatus.textContent = message;
+            statusIndicator.classList.toggle('active', isActive);
+        }
+
+        // Connexion au flux vidéo
+        function connectToVideoFeed() {
+            eventSource = new EventSource("{{ url_for('video_feed') }}");
+            
+            eventSource.onopen = () => {
+                updateStatus("النظام جاهز", true);
+                output.innerHTML = '<p style="color: var(--primary-dark)">تم الاتصال بالخادم بنجاح</p>';
+            };
+            
+            eventSource.onmessage = (e) => {
+                try {
+                    const data = JSON.parse(e.data);
+                    
+                    if (data.frame) {
+                        videoFeed.src = "data:image/jpeg;base64," + data.frame;
+                    }
+                    
+                    if (data.letter) {
+                        letterDisplay.textContent = data.letter;
+                    }
+                    
+                    if (data.progress !== undefined) {
+                        progressBar.style.width = `${data.progress * 100}%`;
+                    }
+                    
+                    if (data.word !== undefined) {
+                        confirmedWord = data.word;
+                        wordDisplay.textContent = confirmedWord;
+                    }
+                } catch (err) {
+                    console.error("Error parsing data:", err);
+                }
+            };
+            
+            eventSource.onerror = () => {
+                output.innerHTML = '<p style="color: var(--accent)">فقدان الاتصال بالخادم! جاري إعادة الاتصال...</p>';
+                updateStatus("جاري إعادة الاتصال", false);
+                setTimeout(connectToVideoFeed, 3000);
+            };
+        }
+
+        // Vérification de la caméra
+        async function checkCamera() {
+            try {
+                const response = await fetch("{{ url_for('check_camera') }}");
+                const data = await response.json();
+                
+                if (data.status === "success") {
+                    connectToVideoFeed();
+                } else {
+                    output.innerHTML = `
+                        <p style="color: var(--accent)">خطأ في الكاميرا!</p>
+                        <p>${data.message}</p>
+                    `;
+                    updateStatus("خطأ في الكاميرا", false);
+                }
+            } catch (err) {
+                console.error("Camera check error:", err);
+                output.innerHTML = '<p style="color: var(--accent)">خطأ في الاتصال بالخادم</p>';
+                updateStatus("خطأ في الاتصال", false);
+            }
+        }
+
+        // Événements
+        resetBtn.addEventListener('click', async () => {
+            try {
+                const response = await fetch("{{ url_for('reset_word') }}");
+                if (response.ok) {
+                    progressBar.style.width = '0%';
+                    output.innerHTML = '<p style="color: var(--primary-dark)">تم إعادة تعيين الجملة</p>';
+                    
+                    // Feedback visuel
+                    resetBtn.innerHTML = '<i class="fas fa-check"></i> تم الإعادة';
+                    setTimeout(() => {
+                        resetBtn.innerHTML = '<i class="fas fa-redo"></i> إعادة تعيين';
+                    }, 1500);
+                }
+            } catch (err) {
+                console.error("Reset error:", err);
+                output.innerHTML = '<p style="color: var(--accent)">خطأ في إعادة التعيين</p>';
+            }
+        });
+
+        speakBtn.addEventListener('click', async () => {
+            if (!confirmedWord) {
+                output.innerHTML = '<p style="color: var(--accent)">لا توجد جملة لنطقها!</p>';
+                return;
+            }
+            
+            try {
+                const response = await fetch("{{ url_for('speak_word') }}");
+                if (response.ok) {
+                    output.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div class="status-indicator active"></div>
+                            <span>جاري نطق: ${confirmedWord}</span>
+                        </div>
+                    `;
+                    
+                    // Feedback visuel
+                    speakBtn.innerHTML = '<i class="fas fa-volume-up"></i> جاري النطق...';
+                    setTimeout(() => {
+                        speakBtn.innerHTML = '<i class="fas fa-volume-up"></i> نطق الجملة';
+                    }, 3000);
+                }
+            } catch (err) {
+                console.error("Speak error:", err);
+                output.innerHTML = '<p style="color: var(--accent)">خطأ في النطق</p>';
+            }
+        });
+
+        undoBtn.addEventListener('click', async () => {
+            try {
+                const response = await fetch("{{ url_for('undo_letter') }}");
+                if (response.ok) {
+                    output.innerHTML = '<p>تم حذف آخر حرف</p>';
+                    
+                    // Feedback visuel
+                    undoBtn.innerHTML = '<i class="fas fa-check"></i> تم التراجع';
+                    setTimeout(() => {
+                        undoBtn.innerHTML = '<i class="fas fa-undo"></i> تراجع';
+                    }, 1500);
+                }
+            } catch (err) {
+                console.error("Undo error:", err);
+                output.innerHTML = '<p style="color: var(--accent)">خطأ في التراجع</p>';
+            }
+        });
+
+        // Initialisation
+        checkCamera();
+    </script>
+</body>
+</html>

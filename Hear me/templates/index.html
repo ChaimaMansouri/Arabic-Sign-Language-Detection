@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>لغة الاشارة العربية</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+        
+        :root {
+            --primary: #00adad;
+            --primary-dark: #008b8b;
+            --primary-darker: #006b6b;
+            --primary-light: #a7f0d0;
+            --primary-bg: #f0fffc;
+            --text-dark: #2d4148;
+            --text-light: #4a5d68;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: var(--primary-bg);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Animated Background Elements */
+        .bg-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .bg-elements span {
+            position: absolute;
+            display: block;
+            width: 20px;
+            height: 20px;
+            background: rgba(149, 117, 205, 0.1);
+            border-radius: 50%;
+            animation: float 15s linear infinite;
+            bottom: -150px;
+        }
+        
+        .bg-elements span:nth-child(1) {
+            left: 25%;
+            width: 80px;
+            height: 80px;
+            animation-delay: 0s;
+        }
+        
+        .bg-elements span:nth-child(2) {
+            left: 10%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 2s;
+            animation-duration: 12s;
+        }
+        
+        .bg-elements span:nth-child(3) {
+            left: 70%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 4s;
+        }
+        
+        .bg-elements span:nth-child(4) {
+            left: 40%;
+            width: 60px;
+            height: 60px;
+            animation-delay: 0s;
+            animation-duration: 18s;
+        }
+        
+        .bg-elements span:nth-child(5) {
+            left: 65%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 0s;
+        }
+        
+        .bg-elements span:nth-child(6) {
+            left: 75%;
+            width: 110px;
+            height: 110px;
+            animation-delay: 3s;
+        }
+        
+        .bg-elements span:nth-child(7) {
+            left: 35%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 7s;
+        }
+        
+        .bg-elements span:nth-child(8) {
+            left: 50%;
+            width: 25px;
+            height: 25px;
+            animation-delay: 15s;
+            animation-duration: 45s;
+        }
+        
+        .bg-elements span:nth-child(9) {
+            left: 20%;
+            width: 15px;
+            height: 15px;
+            animation-delay: 2s;
+            animation-duration: 35s;
+        }
+        
+        .bg-elements span:nth-child(10) {
+            left: 85%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 0s;
+            animation-duration: 11s;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+                border-radius: 0;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+                border-radius: 50%;
+            }
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .logo {
+            width: 150px;
+            margin-top: -50px;
+            transition: transform 0.3s;
+        }
+        
+        .logo:hover {
+            transform: rotate(15deg) scale(1.1);
+        }
+        
+        nav ul {
+            margin-top: -40px;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        nav a {
+            position: relative;
+            padding: 10px 15px;
+            cursor: pointer;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: all 0.3s;
+            text-decoration: none; 
+        }
+        
+        nav li a:hover {
+            color: var(--primary-dark);
+        }
+        
+        nav li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+        
+        nav li a:hover::after {
+            width: 100%;
+            left: 0;
+        }
+        
+        .nav-button {
+            padding: 12px 30px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-family: 'Tajawal';
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(149, 117, 205, 0.3);
+        }
+        
+        .nav-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(149, 117, 205, 0.4);
+        }
+        
+        .nav-button:active {
+            transform: translateY(1px);
+        }
+        
+        .content {
+            margin: 60px 0;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            color: var(--text-dark);
+            line-height: 1.2;
+            margin-bottom: 30px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 0;
+            width: 70%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), transparent);
+            border-radius: 2px;
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin: 80px 0;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(149, 117, 205, 0.12);
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            transition: height 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(149, 117, 205, 0.2);
+        }
+        
+        .card:hover::before {
+            height: 10px;
+        }
+        
+        .card-icon {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 25px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 80px;
+            height: 80px;
+            background: rgba(149, 117, 205, 0.1);
+            border-radius: 50%;
+            transition: all 0.4s;
+        }
+        
+        .card:hover .card-icon {
+            transform: rotateY(360deg) scale(1.1);
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 5px 20px rgba(149, 117, 205, 0.3);
+        }
+        
+        .card-title {
+            color: var(--primary-darker);
+            font-size: 1.5rem;
+            margin: 0 0 20px 0;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .card-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            right: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--primary-light);
+            transition: width 0.3s;
+        }
+        
+        .card:hover .card-title::after {
+            width: 100%;
+        }
+        
+        .card-text {
+            color: var(--text-light);
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+        
+        .card-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Tajawal';
+            box-shadow: 0 4px 15px rgba(149, 117, 205, 0.3);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .card-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.6s;
+        }
+        
+        .card-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(149, 117, 205, 0.4);
+        }
+        
+        .card-button:hover::before {
+            left: 100%;
+        }
+        
+        .card-button i {
+            transition: transform 0.3s;
+        }
+        
+        .card-button:hover i {
+            transform: translateX(5px);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            h1 {
+                font-size: 2.8rem;
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .bar {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Floating Animation */
+        @keyframes floating {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        /* Pulse Animation */
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+
+        .sections {
+            padding: 100px 20px;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .section-content {
+            margin-bottom: 100px;
+            padding: 40px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(149, 117, 205, 0.15);
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.8s ease-out;
+            border: 1px solid rgba(149, 117, 205, 0.1);
+        }
+
+        .section-content h2 {
+            font-size: 2rem;
+            color: var(--primary-darker);
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        .section-content h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 80%;
+            height: 3px;
+            background: linear-gradient(to left, var(--primary), transparent);
+            border-radius: 2px;
+        }
+
+        /* Dictionary Cards */
+        .dictionary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .dict-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(149, 117, 205, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .dict-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .dict-card img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(149, 117, 205, 0.2);
+        }
+
+        /* About Project Layout */
+        .about-layout {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .about-image img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(149, 117, 205, 0.2);
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+            line-height: 1.7;
+            color: var(--text-light);
+        }
+
+        /* Contact Cards */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .contact-card {
+            padding: 30px 20px;
+            border-radius: 20px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 35px rgba(149, 117, 205, 0.2);
+        }
+
+        .contact-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .contact-card:hover::before {
+            opacity: 1;
+        }
+
+        .contact-card i {
+            font-size: 24px;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-bg);
+            color: var(--primary-dark);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover i {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .contact-card h4 {
+            color: var(--primary-darker);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .contact-card p {
+            margin: 0;
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .contact-card a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-card a:hover {
+            color: var(--primary);
+        }
+        .section-content.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .dictionary-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.dictionary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.hidden-cards {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out;
+}
+
+.show-more-btn {
+    margin: 40px auto 0;
+    display: block;
+    width: auto;
+}
+
+.show-more-btn i {
+    transition: transform 0.3s;
+}
+
+.show-more-btn.active i {
+    transform: rotate(180deg);
+}
+
+/* Animation for new cards */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dict-card {
+    animation: fadeIn 0.5s ease-out;
+}
+    </style>
+</head>
+<body>
+    <!-- Animated Background Elements -->
+    <div class="bg-elements">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    
+    <div class="container">
+        <div class="bar">
+            <!-- logo -->
+            <img src="{{ url_for('static', filename='images/Hear_me.png') }}" alt="لغة الإشارة العربية" class="logo pulse">
+            <!-- nav bar -->
+            <nav>
+                <ul>
+                    <li><a href="#">الصفحة الرئيسية</a></li>
+                    <li><a href="#ai">كيف يعمل</a></li>
+                    <li><a href="#sign-dictionary">المعجم الإشاري</a></li>
+                    <li><a href="#about-project">عن المشروع</a></li>
+                    <li><a href="#contact-us">اتصل بنا</a></li>
+                    <button class="nav-button" onclick="window.location.href='/detection'">
+                        ابدأ الان <i class="fas fa-arrow-left"></i>
+                    </button>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="content">
+            <h1>نظام كشف فوري ودقيق للغة الاشارة العربية باستخدام الذكاء الاصطناعي</h1>
+        </div>
+
+        <div class="cards-container" id="ai">
+            <!-- Card 1: Detection -->
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-hands"></i>
+                </div>
+                <h3 class="card-title">كشف الإشارات</h3>
+                <p class="card-text">تقنية متقدمة لاكتشاف حركات لغة الإشارة العربية بدقة تصل إلى 98.5% باستخدام أحدث خوارزميات الذكاء الاصطناعي والتعلم العميق</p>
+                <button class="card-button">المزيد <i class="fas fa-arrow-left"></i></button>
+            </div>
+            
+            <!-- Card 2: Text Conversion -->
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-keyboard"></i>
+                </div>
+                <h3 class="card-title">تحويل إلى نص</h3>
+                <p class="card-text">ترجمة إشاراتك إلى نصوص مكتوبة مباشرة بلغة عربية سليمة مع إمكانية التعديل والتنسيق قبل الحفظ أو المشاركة</p>
+                <button class="card-button">المزيد <i class="fas fa-arrow-left"></i></button>
+            </div>
+            
+            <!-- Card 3: Voice Conversion -->
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-volume-up"></i>
+                </div>
+                <h3 class="card-title">تحويل إلى صوت</h3>
+                <p class="card-text">نظام تحويل النص إلى كلام واضح بنبرة طبيعية متعددة اللهجات مع إمكانية اختيار نوع الصوت وسرعة الكلام</p>
+                <button class="card-button">المزيد <i class="fas fa-arrow-left"></i></button>
+            </div>
+        </div>
+        
+
+        <!-- Sections Based on Navigation -->
+<div class="sections">
+
+    <!-- Sign Dictionary Section -->
+<section id="sign-dictionary" class="section-content">
+    <h2>المعجم الإشاري</h2>
+    <p>استكشف أبجدية لغة الإشارة العربية من خلال بطاقات مرتبة تحتوي على صور وشرح مبسط لكل حركة.</p>
+
+    <div class="dictionary-container">
+        <!-- Initial Visible Cards -->
+        <div class="dictionary-cards visible-cards">
+            <!-- Group 1 -->
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Alef_89.jpg') }}" alt="حرف أ">
+                <h4>حرف أ</h4>
+                <p>اليد مغلقة تمامًا، والإصبع الكبير مرفوع للأعلى.</p>
+            </div>
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Beh_8.jpg') }}" alt="حرف ب">
+                <h4>حرف ب</h4>
+                <p>اليد مفتوحة مع تلامس الأصابع بعضها البعض.</p>
+            </div>
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Teh_76.jpg') }}" alt="حرف ت">
+                <h4>حرف ت</h4>
+                <p>الإبهام والسبابة يشكلان شكل حرف T.</p>
+            </div>
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Theh_87.jpg') }}" alt="حرف ث">
+                <h4>حرف ث</h4>
+                <p>الإبهام والسبابة والوسطى مفتوحة.</p>
+            </div>
+        </div>
+
+        <!-- Hidden Cards -->
+        <div class="dictionary-cards hidden-cards">
+            <!-- Group 2 -->
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Jeem_88.jpg') }}" alt="حرف ج">
+                <h4>حرف ج</h4>
+                <p>اليد على شكل كوب مائل.</p>
+            </div>
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Hah_56.jpg') }}" alt="حرف ح">
+                <h4>حرف ح</h4>
+                <p>اليد مفتوحة مع انحناء بسيط.</p>
+            </div>
+
+            <!-- Group 3 -->
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Khah_84.jpg') }}" alt="حرف خ">
+                <h4>حرف خ</h4>
+                <p>اليد مفتوحة مع تحريك الأصابع للأمام.</p>
+            </div>
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Dal_88.jpg') }}" alt="حرف د">
+                <h4>حرف د</h4>
+                <p>الإصبع السبابة مرفوع للأعلى.</p>
+            </div>
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/thal_84.jpg') }}" alt="حرف ذ">
+                <h4>حرف ذ</h4>
+                <p>الإصبع السبابة مرفوع مع تحريكه دائريًا.</p>
+            </div>
+
+            <!-- Group 4 -->
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Reh_65.jpg') }}" alt="حرف ر">
+                <h4>حرف ر</h4>
+                <p>اليد مضمومة مع تحريك الرسغ.</p>
+            </div>
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Zain_24.jpg') }}" alt="حرف ز">
+                <h4>حرف ز</h4>
+                <p>الإصبع السبابة مرفوع مع تحريكه جانبيًا.</p>
+            </div>
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Seen_32.jpg') }}" alt="حرف س">
+                <h4>حرف س</h4>
+                <p>اليد مضمومة مع تحريكها للأمام والخلف.</p>
+            </div>
+
+            <!-- Group 5 -->
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Sheen_38.jpg') }}" alt="حرف ش">
+                <h4>حرف ش</h4>
+                <p>اليد مفتوحة مع تحريكها للأمام والخلف.</p>
+            </div>
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Sad_42.jpg') }}" alt="حرف ص">
+                <h4>حرف ص</h4>
+                <p>اليد مضمومة مع ضغط الأصابع.</p>
+            </div>
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Dad_263.jpg') }}" alt="حرف ض">
+                <h4>حرف ض</h4>
+                <p>اليد مضمومة مع تحريك الرسغ بقوة.</p>
+            </div>
+
+            <!-- Group 6 -->
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Tah_112.jpg') }}" alt="حرف ط">
+                <h4>حرف ط</h4>
+                <p>اليد مفتوحة مع ضغط الأصابع للأسفل.</p>
+            </div>
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Zah_75.jpg') }}" alt="حرف ظ">
+                <h4>حرف ظ</h4>
+                <p>اليد مفتوحة مع تحريكها للأمام بقوة.</p>
+            </div>
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Ain_234.jpg') }}" alt="حرف ع">
+                <h4>حرف ع</h4>
+                <p>اليد مضمومة مع تحريك الإبهام.</p>
+            </div>
+
+            <!-- Group 7 -->
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Ghain_79.jpg') }}" alt="حرف غ">
+                <h4>حرف غ</h4>
+                <p>اليد مفتوحة مع تحريكها أمام الوجه.</p>
+            </div>
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Feh_240.jpeg') }}" alt="حرف ف">
+                <h4>حرف ف</h4>
+                <p>الإبهام والسبابة مفتوحتان.</p>
+            </div>
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Qaf_181.jpg') }}" alt="حرف ق">
+                <h4>حرف ق</h4>
+                <p>اليد مضمومة مع تحريكها للأعلى.</p>
+            </div>
+
+            <!-- Group 8 -->
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Kaf_259.jpg') }}" alt="حرف ك">
+                <h4>حرف ك</h4>
+                <p>اليد مفتوحة مع ثني الأصابع قليلاً.</p>
+            </div>
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Lam_65.jpg') }}" alt="حرف ل">
+                <h4>حرف ل</h4>
+                <p>الإصبع السبابة ممدود للأمام.</p>
+            </div>
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Meem_4.jpg') }}" alt="حرف م">
+                <h4>حرف م</h4>
+                <p>اليد مضمومة مع تحريكها دائريًا.</p>
+            </div>
+
+            <!-- Group 9 -->
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Noon_49.jpeg') }}" alt="حرف ن">
+                <h4>حرف ن</h4>
+                <p>اليد مفتوحة مع تحريك الأصابع للأسفل.</p>
+            </div>
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Heh_54.jpg') }}" alt="حرف ه">
+                <h4>حرف ه</h4>
+                <p>اليد مفتوحة مع تحريكها أمام الصدر.</p>
+            </div>
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Waw_59.jpg') }}" alt="حرف و">
+                <h4>حرف و</h4>
+                <p>اليد مضمومة مع تحريك الإبهام.</p>
+            </div>
+
+            <!-- Group 10 -->
+            <div class="dict-card">
+                <img src="{{ url_for('static', filename='images/Yeh_184.jpg') }}" alt="حرف ي">
+                <h4>حرف ي</h4>
+                <p>اليد مفتوحة مع ثني الأصابع قليلاً.</p>
+            </div>
+        </div>
+    </div>
+
+    <button class="card-button show-more-btn">عرض المزيد <i class="fas fa-arrow-down"></i></button>
+</section>
+
+    <!-- About Project Section -->
+    <section id="about-project" class="section-content">
+        <div class="about-layout">
+            <div class="about-image">
+                <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto;">
+                <rect x="50" y="50" width="120" height="80" rx="15" fill="#9575cd" opacity="0.3"/>
+                <circle cx="250" cy="120" r="50" fill="#ce93d8" opacity="0.4"/>
+                <ellipse cx="150" cy="250" rx="70" ry="40" fill="#e1bee7" opacity="0.3"/>
+                <rect x="350" y="100" width="100" height="100" rx="20" fill="#b39ddb" opacity="0.35"/>
+                <circle cx="480" cy="220" r="30" fill="#9fa8da" opacity="0.4"/>
+                <path d="M100,300 Q150,280 200,320 Q250,360 300,320" stroke="#7e57c2" stroke-width="3" fill="none" opacity="0.2"/>
+                <polygon points="400,250 450,220 500,270 470,310 420,300" fill="#a5d6a7" opacity="0.3"/>
+                <rect x="100" y="350" width="150" height="30" rx="10" fill="#ffcc80" opacity="0.3"/>
+            </svg>
+            </div>
+            <div class="about-text">
+                <h2>عن المشروع</h2>
+                <p><strong>لمن هذا المشروع؟</strong><br>يهدف إلى تسهيل التواصل بين الأشخاص ذوي الإعاقة السمعية وغيرهم باستخدام تقنيات الذكاء الاصطناعي الحديثة.</p>
+                <p><strong>ما هي الفكرة؟</strong><br>نظام يقوم بتحويل إشارات لغة الجسد إلى كلمات مكتوبة أو أصوات بطريقة فورية ودقيقة.</p>
+                <p><strong>كيف يعمل؟</strong><br>نستخدم كاميرا الجهاز لالتقاط الحركات، ثم نقوم بتحليلها عبر نموذج AI لتحويلها إلى نصوص أو أصوات.</p>
+                <button class="nav-button">تعرف أكثر <i class="fas fa-arrow-left"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Us Section -->
+<section id="contact-us" class="section-content">
+    <h2>اتصل بنا</h2>
+    <p>لأي استفسارات أو اقتراحات، يمكنك التواصل معنا عبر القنوات التالية:</p>
+
+    <div class="contact-grid">
+        <div class="contact-card">
+            <i class="fas fa-phone-alt"></i>
+            <h4>رقم الهاتف</h4>
+            <p><a href="tel:+966598765432">+966 59 876 5432</a></p>
+        </div>
+        <div class="contact-card">
+            <i class="fas fa-envelope"></i>
+            <h4>البريد الإلكتروني</h4>
+            <p><a href="mailto:support@arabicsignlanguage.com">support@arabicsignlanguage.com</a></p>
+        </div>
+        <div class="contact-card">
+            <i class="fab fa-facebook-f"></i>
+            <h4>Facebook</h4>
+            <p><a href="#" target="_blank">@ArabicSignProject</a></p>
+        </div>
+        <div class="contact-card">
+            <i class="fab fa-instagram"></i>
+            <h4>Instagram</h4>
+            <p><a href="#" target="_blank">@ArabicSignLang</a></p>
+        </div>
+    </div>
+</section>
+
+</div>
+        
+    </div>
+
+    <script>
+        // Add ripple effect to buttons
+        document.querySelectorAll('.card-button, .nav-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const x = e.clientX - e.target.getBoundingClientRect().left;
+                const y = e.clientY - e.target.getBoundingClientRect().top;
+                
+                const ripple = document.createElement('span');
+                ripple.classList.add('ripple');
+                ripple.style.left = `${x}px`;
+                ripple.style.top = `${y}px`;
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 1000);
+            });
+        });
+        
+        // Add scroll animation
+        window.addEventListener('scroll', () => {
+            const cards = document.querySelectorAll('.card');
+            const windowHeight = window.innerHeight;
+            
+            cards.forEach(card => {
+                const cardPosition = card.getBoundingClientRect().top;
+                if (cardPosition < windowHeight - 100) {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }
+            });
+        });
+        
+        // Trigger initial animation
+        document.querySelectorAll('.card').forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(50px)';
+            card.style.transition = `all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) ${index * 0.1}s`;
+        });
+        
+        // Force animation on load
+        setTimeout(() => {
+            document.querySelectorAll('.card').forEach(card => {
+                const cardPosition = card.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (cardPosition < windowHeight) {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }
+            });
+        }, 500);
+
+        // Fade-in sections on scroll
+const sections = document.querySelectorAll('.section-content');
+
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, {
+    threshold: 0.2
+});
+
+sections.forEach(section => {
+    observer.observe(section);
+});
+
+
+document.querySelector('.show-more-btn').addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    const hiddenCards = document.querySelector('.hidden-cards');
+    const button = this;
+    
+    if (hiddenCards.style.maxHeight) {
+        // Collapse
+        hiddenCards.style.maxHeight = null;
+        button.innerHTML = 'عرض المزيد <i class="fas fa-arrow-down"></i>';
+    } else {
+        // Expand
+        hiddenCards.style.maxHeight = hiddenCards.scrollHeight + 'px';
+        button.innerHTML = 'عرض أقل <i class="fas fa-arrow-up"></i>';
+        
+        // Smooth scroll to bottom of new cards
+        setTimeout(() => {
+            hiddenCards.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'nearest'
+            });
+        }, 500);
+    }
+    
+    button.classList.toggle('active');
+});
+    </script>
+</body>
+</html>
