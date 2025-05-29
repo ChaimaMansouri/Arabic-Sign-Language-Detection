@@ -6,4 +6,3 @@ mediapipe
 joblib
 gTTS
 python-bidi
-playsound
